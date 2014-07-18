@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\classes-f0b02ea4d50e7b901a5ee61c8566fde147e58f82.jar"
+        jar="C:\Users\SKG\Documents\trailer\build\exploded-aar\com.etsy.android.grid\library\1.0.5\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="8218789edb56bdcfff7da48e892b37460fc707e2"/>
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\classes-721d044ec46a6d27ddf7fa9caed778a5a1604849.jar"
+        jar="C:\Users\SKG\Documents\trailer\build\exploded-aar\com.github.gabrielemariotti.cards\library-extra\1.8.0\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="0364dd50bb025a9b1f2438c411910e31cf8b3842"/>
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\classes-f725c854b34a2e759e8b7621f537aab8fa1ea4bf.jar"
+        jar="C:\Users\SKG\Documents\trailer\build\exploded-aar\com.github.gabrielemariotti.cards\library\1.8.0\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="332683f886584a5be900eb08d202e209738d5269"/>
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\support-v4-19.1.0-8ecf0c4e72150e9ec1c88f49efe31203cd123544.jar"
+        jar="C:\Users\SKG\AppData\Local\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\classes-9ae2046f2d3215f560d362a66803d82eff652de9.jar"
+        jar="C:\Users\SKG\Documents\trailer\build\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\library-2.6.0-08ebdfa595ae3b7e7c0e173d1696b568a4d7c4f6.jar"
+        jar="C:\Users\SKG\.gradle\caches\modules-2\files-2.1\com.nhaarman.listviewanimations\library\2.6.0\59351ccb0a1631d30358f6a92749a072f2df7602\library-2.6.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="59351ccb0a1631d30358f6a92749a072f2df7602"/>
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\library-2.4.0-d0d759d0faf3df548f86694cac2ace6e3a117c1f.jar"
+        jar="C:\Users\SKG\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb"/>
+
+</pre-dex-items>
