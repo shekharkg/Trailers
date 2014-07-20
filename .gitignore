@@ -6,3 +6,4 @@
 *.name
 .idea/
 gradle/
+app/src/main/java/com/trailer/youtube/DeveloperKey.java

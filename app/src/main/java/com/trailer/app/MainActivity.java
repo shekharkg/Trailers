@@ -3,7 +3,6 @@ package com.trailer.app;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -88,7 +87,9 @@ public class MainActivity extends Activity {
             @Override
             public void onClick(Card card, View view) {
               //Toast.makeText(getContext(), card.getId(), Toast.LENGTH_SHORT).show();
-              Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + trailerDao.getUrl()));
+              //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + trailerDao.getUrl()));
+              Intent intent = new Intent(MainActivity.this, FullscreenDemoActivity.class);
+              intent.putExtra("videoId", trailerDao.getUrl());
               startActivity(intent);
             }
           });
