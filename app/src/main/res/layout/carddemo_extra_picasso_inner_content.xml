@@ -35,7 +35,8 @@
         android:id="@+id/carddemo_extra_picasso_main_inner_secondaryTitle"
         style="@style/carddemo_extra_base_main_inner_secondarytitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:visibility="invisible"/>
 
 
 </LinearLayout>

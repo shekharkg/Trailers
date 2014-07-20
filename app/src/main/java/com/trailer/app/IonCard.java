@@ -1,6 +1,8 @@
 package com.trailer.app;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -37,13 +39,7 @@ public class IonCard extends Card {
         cardThumbnail.setExternalUsage(true);
         addCardThumbnail(cardThumbnail);
 
-        //Add ClickListener
-        setOnClickListener(new OnCardClickListener() {
-            @Override
-            public void onClick(Card card, View view) {
-                Toast.makeText(getContext(), "Click Listener card=" + card.getTitle(), Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 
     @Override

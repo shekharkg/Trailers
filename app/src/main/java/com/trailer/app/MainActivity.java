@@ -1,11 +1,16 @@
 package com.trailer.app;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
 
 import com.nhaarman.listviewanimations.swinginadapters.AnimationAdapter;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
+import com.trailer.dao.TrailerDao;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,112 +26,111 @@ import it.gmariotti.cardslib.library.view.CardListView;
 
 public class MainActivity extends Activity {
 
-    String urlYouTube = "https://gdata.youtube.com/feeds/api/users/TheViralFeverVideos/uploads?v=2&alt=jsonc";
-    String videoTitle, videoDescription, videoImage;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        int listImages[] = new int[]{R.drawable.angry_1, R.drawable.angry_2,
-                R.drawable.angry_3, R.drawable.angry_4, R.drawable.angry_5};
+  String urlYouTube = "https://gdata.youtube.com/feeds/api/users/tseries/uploads?v=2&alt=jsonc";
+  CardListView listView;
 
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
+    listView = (CardListView) this.findViewById(R.id.myList);
+
+    new HttpAsyncTask().execute(urlYouTube);
+
+  }
+
+  class HttpAsyncTask extends AsyncTask<String, Void, String> {
+    GetJsonString getJsonString = new GetJsonString();
+    ProgressDialog dialog;
+
+    @Override
+    protected void onPreExecute() {
+      // TODO Auto-generated method stub
+      dialog = new ProgressDialog(MainActivity.this);
+      dialog.setTitle("Loading...");
+      dialog.show();
+      super.onPreExecute();
+    }
+    @Override
+    protected String doInBackground(String... urls) {
+      return getJsonString.GET(urlYouTube);
+    }
+
+    @Override
+    protected void onPostExecute(String result) {
+      dialog.dismiss();
+
+      try {
+        JSONObject object = new JSONObject(result);
+        JSONObject data = object.getJSONObject("data");
+        JSONArray items = data.getJSONArray("items");
         ArrayList<Card> cards = new ArrayList<Card>();
 
-        int x=0,y=0;
-        for (int i = 0; i<5; i++) {
+
+        for (int i = 0; i < items.length(); i++) {
+          String title = items.getJSONObject(i).getString("title");
+          String description = items.getJSONObject(i).getString("description");
+          String thumbnail = items.getJSONObject(i).getJSONObject("thumbnail").getString("sqDefault");
+          String url = items.getJSONObject(i).getString("id");
+          final TrailerDao trailerDao = new TrailerDao(title, description, thumbnail, url);
+
             // Create a Card
-            IonCard card = new IonCard(this);
-            card.setTitle("Title " + y);
-            card.setSecondaryTitle("Description..." + y);
-            y++;
+            IonCard card = new IonCard(MainActivity.this);
+            card.setTitle(trailerDao.getTitle());
+            card.setSecondaryTitle(trailerDao.getDescription());
+            card.setId(trailerDao.getUrl());
 
+            CardThumbnail thumb = new CardThumbnail(MainActivity.this);
+            thumb.setUrlResource(trailerDao.getThumbnailUrl());
 
-
-
-            CardThumbnail thumb = new CardThumbnail(this);
-            thumb.setDrawableResource(listImages[i]);
             card.addCardThumbnail(thumb);
-
-            switch (i % 5) {
-                case 0:
-                    card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color1);
-                    break;
-                case 1:
-                    card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color2);
-                    break;
-                case 2:
-                    card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color3);
-                    break;
-                case 3:
-                    card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color4);
-                    break;
-                case 4:
-                    card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color5);
-                    break;
+          card.setOnClickListener(new Card.OnCardClickListener() {
+            @Override
+            public void onClick(Card card, View view) {
+              //Toast.makeText(getContext(), card.getId(), Toast.LENGTH_SHORT).show();
+              Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + trailerDao.getUrl()));
+              startActivity(intent);
             }
+          });
 
+           /* switch (i % 5) {
+              case 0:
+                card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color1);
+                break;
+              case 1:
+                card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color2);
+                break;
+              case 2:
+                card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color3);
+                break;
+              case 3:
+                card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color4);
+                break;
+              case 4:
+                card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color5);
+                break;
+            }*/
             cards.add(card);
-            if(x<15 && i==4){
-                i=-1;
-                x++;
-            }
-
         }
+        CardArrayAdapter mCardArrayAdapter = new CardArrayAdapter(MainActivity.this, cards);
 
-        CardArrayAdapter mCardArrayAdapter = new CardArrayAdapter(this, cards);
 
-        CardListView listView = (CardListView) this.findViewById(R.id.myList);
         if (listView != null) {
-            listView.setAdapter(mCardArrayAdapter);
+          listView.setAdapter(mCardArrayAdapter);
         }
 
         AnimationAdapter animCardArrayAdapter = new ScaleInAnimationAdapter(mCardArrayAdapter);
         animCardArrayAdapter.setAbsListView(listView);
         if (listView != null) {
-            listView.setExternalAdapter(animCardArrayAdapter,mCardArrayAdapter);
+          listView.setExternalAdapter(animCardArrayAdapter,mCardArrayAdapter);
         }
-
-        new HttpAsyncTask().execute(urlYouTube);
-
+      } catch (JSONException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
     }
 
-    class HttpAsyncTask extends AsyncTask<String, Void, String> {
-        GetJsonString getJsonString = new GetJsonString();
-
-
-        @Override
-        protected void onPreExecute() {
-            // TODO Auto-generated method stub
-            super.onPreExecute();
-        }
-        @Override
-        protected String doInBackground(String... urls) {
-            return getJsonString.GET(urlYouTube);
-        }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            String xxx = result;
-            try {
-                JSONObject json = new JSONObject(result);
-                JSONObject object = json.getJSONObject("object");
-                JSONObject data = object.getJSONObject("data");
-                JSONArray items = data.getJSONArray("items");
-
-
-                for (int i = 0; i < items.length(); i++) {
-                    videoTitle = items.getJSONObject(i).getString("title");
-                    videoDescription = items.getJSONObject(i).getString("description");
-                    videoImage = items.getJSONObject(i).getJSONObject("thumbnail").getString("sqDefault");
-                }
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-    }
+  }
 }
 
 

@@ -31,6 +31,7 @@
 
 
 
+
     <!--  Card customization ***************************************************  -->
 
     <!-- Card -->
@@ -46,5 +47,9 @@
     <dimen name="carddemo_extras_basestaggered_height1">120dp</dimen>
     <dimen name="carddemo_extras_basestaggered_height2">150dp</dimen>
     <dimen name="carddemo_extras_basestaggered_height3">180dp</dimen>
+
+
+    <dimen name="card_thumbnail_width">125dp</dimen>
+    <dimen name="card_thumbnail_height">100dp</dimen>
 
 </resources>

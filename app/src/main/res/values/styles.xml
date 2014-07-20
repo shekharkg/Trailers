@@ -153,6 +153,20 @@
         <item name="android:layout_marginRight">@dimen/card_content_outer_view_margin_right</item>
     </style>
 
+    <style name="card_thumbnail_image">
+        <item name="android:layout_width">@dimen/card_thumbnail_width</item>
+        <item name="android:layout_height">@dimen/card_thumbnail_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:gravity">center</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <style name="card_thumbnail_outer_layout">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+
     <style name="card_thumbnail_crouton_image">
         <item name="android:layout_width">24dp</item>
         <item name="android:layout_height">24dp</item>
