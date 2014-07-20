@@ -1,10 +1,15 @@
 package com.trailer.app;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.nhaarman.listviewanimations.swinginadapters.AnimationAdapter;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -16,6 +21,8 @@ import it.gmariotti.cardslib.library.view.CardListView;
 
 public class MainActivity extends Activity {
 
+    String urlYouTube = "https://gdata.youtube.com/feeds/api/users/TheViralFeverVideos/uploads?v=2&alt=jsonc";
+    String videoTitle, videoDescription, videoImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,12 +32,16 @@ public class MainActivity extends Activity {
 
         ArrayList<Card> cards = new ArrayList<Card>();
 
-        int x=0;
+        int x=0,y=0;
         for (int i = 0; i<5; i++) {
             // Create a Card
-            Card card = new Card(this);
-            // Add Header to card
-            card.setTitle("sample title");
+            IonCard card = new IonCard(this);
+            card.setTitle("Title " + y);
+            card.setSecondaryTitle("Description..." + y);
+            y++;
+
+
+
 
             CardThumbnail thumb = new CardThumbnail(this);
             thumb.setDrawableResource(listImages[i]);
@@ -73,6 +84,46 @@ public class MainActivity extends Activity {
         animCardArrayAdapter.setAbsListView(listView);
         if (listView != null) {
             listView.setExternalAdapter(animCardArrayAdapter,mCardArrayAdapter);
+        }
+
+        new HttpAsyncTask().execute(urlYouTube);
+
+    }
+
+    class HttpAsyncTask extends AsyncTask<String, Void, String> {
+        GetJsonString getJsonString = new GetJsonString();
+
+
+        @Override
+        protected void onPreExecute() {
+            // TODO Auto-generated method stub
+            super.onPreExecute();
+        }
+        @Override
+        protected String doInBackground(String... urls) {
+            return getJsonString.GET(urlYouTube);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            String xxx = result;
+            try {
+                JSONObject json = new JSONObject(result);
+                JSONObject object = json.getJSONObject("object");
+                JSONObject data = object.getJSONObject("data");
+                JSONArray items = data.getJSONArray("items");
+
+
+                for (int i = 0; i < items.length(); i++) {
+                    videoTitle = items.getJSONObject(i).getString("title");
+                    videoDescription = items.getJSONObject(i).getString("description");
+                    videoImage = items.getJSONObject(i).getJSONObject("thumbnail").getString("sqDefault");
+                }
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
     }

@@ -8,11 +8,41 @@
         revision="19.1.0"
         sha1="8218789edb56bdcfff7da48e892b37460fc707e2"/>
     <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\androidasync-1.2.4-2498a03d9244f4705d17605ff9c5061560f217a1.jar"
+        jar="C:\Users\SKG\.gradle\caches\modules-2\files-2.1\com.koushikdutta.async\androidasync\1.2.4\8dc7111050ee5f13a54b1206d47fee856159b2aa\androidasync-1.2.4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="8dc7111050ee5f13a54b1206d47fee856159b2aa"/>
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\classes-9ae2046f2d3215f560d362a66803d82eff652de9.jar"
+        jar="C:\Users\SKG\Documents\trailer\build\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\ion-1.2.4-78c7194825d88b0093d1b469f4a5da7c43e1b000.jar"
+        jar="C:\Users\SKG\.gradle\caches\modules-2\files-2.1\com.koushikdutta.ion\ion\1.2.4\776baf5cac8eb4145dc0901254122cf956a784e3\ion-1.2.4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="776baf5cac8eb4145dc0901254122cf956a784e3"/>
+    <item
         dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\classes-721d044ec46a6d27ddf7fa9caed778a5a1604849.jar"
         jar="C:\Users\SKG\Documents\trailer\build\exploded-aar\com.github.gabrielemariotti.cards\library-extra\1.8.0\classes.jar"
         jumboMode="false"
         revision="19.1.0"
         sha1="0364dd50bb025a9b1f2438c411910e31cf8b3842"/>
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\library-2.6.0-08ebdfa595ae3b7e7c0e173d1696b568a4d7c4f6.jar"
+        jar="C:\Users\SKG\.gradle\caches\modules-2\files-2.1\com.nhaarman.listviewanimations\library\2.6.0\59351ccb0a1631d30358f6a92749a072f2df7602\library-2.6.0.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="59351ccb0a1631d30358f6a92749a072f2df7602"/>
+    <item
+        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\gson-2.2.4-625de59d31943aac70efa68ba085e767e0781412.jar"
+        jar="C:\Users\SKG\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.2.4\a60a5e993c98c864010053cb901b7eab25306568\gson-2.2.4.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="a60a5e993c98c864010053cb901b7eab25306568"/>
     <item
         dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\classes-f725c854b34a2e759e8b7621f537aab8fa1ea4bf.jar"
         jar="C:\Users\SKG\Documents\trailer\build\exploded-aar\com.github.gabrielemariotti.cards\library\1.8.0\classes.jar"
@@ -25,18 +55,6 @@
         jumboMode="false"
         revision="19.1.0"
         sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
-    <item
-        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\classes-9ae2046f2d3215f560d362a66803d82eff652de9.jar"
-        jar="C:\Users\SKG\Documents\trailer\build\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
-    <item
-        dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\library-2.6.0-08ebdfa595ae3b7e7c0e173d1696b568a4d7c4f6.jar"
-        jar="C:\Users\SKG\.gradle\caches\modules-2\files-2.1\com.nhaarman.listviewanimations\library\2.6.0\59351ccb0a1631d30358f6a92749a072f2df7602\library-2.6.0.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="59351ccb0a1631d30358f6a92749a072f2df7602"/>
     <item
         dex="C:\Users\SKG\Documents\trailer\app\build\pre-dexed\debug\library-2.4.0-d0d759d0faf3df548f86694cac2ace6e3a117c1f.jar"
         jar="C:\Users\SKG\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
