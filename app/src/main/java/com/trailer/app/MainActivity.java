@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 
 import com.nhaarman.listviewanimations.swinginadapters.AnimationAdapter;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
@@ -21,18 +23,44 @@ import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardThumbnail;
 import it.gmariotti.cardslib.library.view.CardListView;
+import it.gmariotti.cardslib.library.view.listener.SwipeOnScrollListener;
 
 
 public class MainActivity extends Activity {
 
-  String urlYouTube = "https://gdata.youtube.com/feeds/api/users/tseries/uploads?v=2&alt=jsonc";
+  String baseUrlYouTube = "https://gdata.youtube.com/feeds/api/users/tseries/uploads?v=2&alt=jsonc&start-index=";
+  String urlYouTube = baseUrlYouTube + 1;
   CardListView listView;
+  private ArrayList<Card> cards = new ArrayList<Card>();
+  private int count = 25;
+  public CardArrayAdapter mCardArrayAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     listView = (CardListView) this.findViewById(R.id.myList);
+    listView.setOnScrollListener(
+
+        new SwipeOnScrollListener() {
+          @Override
+          public void onScrollStateChanged(AbsListView view, int scrollState) {
+            super.onScrollStateChanged(view,scrollState);
+          }
+
+          @Override
+          public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+            //what is the bottom iten that is visible
+            int lastInScreen = firstVisibleItem + visibleItemCount;
+
+            Log.d("TAG", "lastInScreen." + lastInScreen);
+            if(lastInScreen == count){
+              urlYouTube = baseUrlYouTube + count;
+              count += 25;
+              new HttpAsyncTask().execute(urlYouTube);
+            }
+          }
+        });
 
     new HttpAsyncTask().execute(urlYouTube);
 
@@ -45,9 +73,12 @@ public class MainActivity extends Activity {
     @Override
     protected void onPreExecute() {
       // TODO Auto-generated method stub
-      dialog = new ProgressDialog(MainActivity.this);
-      dialog.setTitle("Loading...");
-      dialog.show();
+      if(count==25){
+        dialog = new ProgressDialog(MainActivity.this);
+        dialog.setTitle("Loading...");
+        dialog.show();
+      }
+
       super.onPreExecute();
     }
     @Override
@@ -57,13 +88,14 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onPostExecute(String result) {
-      dialog.dismiss();
+      if(count==25)
+        dialog.dismiss();
 
       try {
         JSONObject object = new JSONObject(result);
         JSONObject data = object.getJSONObject("data");
         JSONArray items = data.getJSONArray("items");
-        ArrayList<Card> cards = new ArrayList<Card>();
+
 
 
         for (int i = 0; i < items.length(); i++) {
@@ -73,22 +105,22 @@ public class MainActivity extends Activity {
           String url = items.getJSONObject(i).getString("id");
           final TrailerDao trailerDao = new TrailerDao(title, description, thumbnail, url);
 
-            // Create a Card
-            IonCard card = new IonCard(MainActivity.this);
-            card.setTitle(trailerDao.getTitle());
-            card.setSecondaryTitle(trailerDao.getDescription());
-            card.setId(trailerDao.getUrl());
+          // Create a Card
+          IonCard card = new IonCard(MainActivity.this);
+          card.setTitle(trailerDao.getTitle());
+          card.setSecondaryTitle(trailerDao.getDescription());
+          card.setId(trailerDao.getUrl());
 
-            CardThumbnail thumb = new CardThumbnail(MainActivity.this);
-            thumb.setUrlResource(trailerDao.getThumbnailUrl());
+          CardThumbnail thumb = new CardThumbnail(MainActivity.this);
+          thumb.setUrlResource(trailerDao.getThumbnailUrl());
 
-            card.addCardThumbnail(thumb);
+          card.addCardThumbnail(thumb);
           card.setOnClickListener(new Card.OnCardClickListener() {
             @Override
             public void onClick(Card card, View view) {
               //Toast.makeText(getContext(), card.getId(), Toast.LENGTH_SHORT).show();
               //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube://" + trailerDao.getUrl()));
-              Intent intent = new Intent(MainActivity.this, FullscreenDemoActivity.class);
+              Intent intent = new Intent(MainActivity.this, PlayerViewDemoActivity.class);
               intent.putExtra("videoId", trailerDao.getUrl());
               startActivity(intent);
             }
@@ -111,20 +143,26 @@ public class MainActivity extends Activity {
                 card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color5);
                 break;
             }*/
-            cards.add(card);
-        }
-        CardArrayAdapter mCardArrayAdapter = new CardArrayAdapter(MainActivity.this, cards);
+          cards.add(card);
+
+          mCardArrayAdapter = new CardArrayAdapter(MainActivity.this, cards);
+          mCardArrayAdapter.setNotifyOnChange(true);
+          mCardArrayAdapter.notifyDataSetChanged();
 
 
-        if (listView != null) {
-          listView.setAdapter(mCardArrayAdapter);
+
+          if (listView != null) {
+            listView.setAdapter(mCardArrayAdapter);
+          }
+
+          AnimationAdapter animCardArrayAdapter = new ScaleInAnimationAdapter(mCardArrayAdapter);
+          animCardArrayAdapter.setAbsListView(listView);
+          if (listView != null) {
+            listView.setExternalAdapter(animCardArrayAdapter, mCardArrayAdapter);
+
+          }
         }
 
-        AnimationAdapter animCardArrayAdapter = new ScaleInAnimationAdapter(mCardArrayAdapter);
-        animCardArrayAdapter.setAbsListView(listView);
-        if (listView != null) {
-          listView.setExternalAdapter(animCardArrayAdapter,mCardArrayAdapter);
-        }
       } catch (JSONException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
