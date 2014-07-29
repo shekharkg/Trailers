@@ -8,17 +8,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
-
 import com.nhaarman.listviewanimations.swinginadapters.AnimationAdapter;
 import com.nhaarman.listviewanimations.swinginadapters.prepared.ScaleInAnimationAdapter;
 import com.trailer.dao.TrailerDao;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
-
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardArrayAdapter;
 import it.gmariotti.cardslib.library.internal.CardThumbnail;
@@ -34,14 +30,22 @@ public class MainActivity extends Activity {
   private ArrayList<Card> cards = new ArrayList<Card>();
   private int count = 25;
   public CardArrayAdapter mCardArrayAdapter;
+  private ProgressDialog dialog;
+  private AnimationAdapter animCardArrayAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
     listView = (CardListView) this.findViewById(R.id.myList);
-    listView.setOnScrollListener(
 
+    mCardArrayAdapter = new CardArrayAdapter(MainActivity.this, cards);
+    listView.setAdapter(mCardArrayAdapter);
+    animCardArrayAdapter = new ScaleInAnimationAdapter(mCardArrayAdapter);
+    animCardArrayAdapter.setAbsListView(listView);
+    listView.setExternalAdapter(animCardArrayAdapter, mCardArrayAdapter);
+
+    listView.setOnScrollListener(
         new SwipeOnScrollListener() {
           @Override
           public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -52,23 +56,23 @@ public class MainActivity extends Activity {
           public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             //what is the bottom iten that is visible
             int lastInScreen = firstVisibleItem + visibleItemCount;
-
             Log.d("TAG", "lastInScreen." + lastInScreen);
             if(lastInScreen == count){
               urlYouTube = baseUrlYouTube + count;
               count += 25;
               new HttpAsyncTask().execute(urlYouTube);
+              Card card = new Card(MainActivity.this);
+              card.setInnerLayout(R.layout.loading_view_demo);
+              mCardArrayAdapter.add(card);
             }
           }
         });
 
     new HttpAsyncTask().execute(urlYouTube);
-
   }
 
   class HttpAsyncTask extends AsyncTask<String, Void, String> {
     GetJsonString getJsonString = new GetJsonString();
-    ProgressDialog dialog;
 
     @Override
     protected void onPreExecute() {
@@ -78,9 +82,9 @@ public class MainActivity extends Activity {
         dialog.setTitle("Loading...");
         dialog.show();
       }
-
       super.onPreExecute();
     }
+
     @Override
     protected String doInBackground(String... urls) {
       return getJsonString.GET(urlYouTube);
@@ -90,13 +94,15 @@ public class MainActivity extends Activity {
     protected void onPostExecute(String result) {
       if(count==25)
         dialog.dismiss();
+      else
+      {
+        cards.remove(count-25);
+      }
 
       try {
         JSONObject object = new JSONObject(result);
         JSONObject data = object.getJSONObject("data");
         JSONArray items = data.getJSONArray("items");
-
-
 
         for (int i = 0; i < items.length(); i++) {
           String title = items.getJSONObject(i).getString("title");
@@ -110,10 +116,8 @@ public class MainActivity extends Activity {
           card.setTitle(trailerDao.getTitle());
           card.setSecondaryTitle(trailerDao.getDescription());
           card.setId(trailerDao.getUrl());
-
           CardThumbnail thumb = new CardThumbnail(MainActivity.this);
           thumb.setUrlResource(trailerDao.getThumbnailUrl());
-
           card.addCardThumbnail(thumb);
           card.setOnClickListener(new Card.OnCardClickListener() {
             @Override
@@ -125,50 +129,15 @@ public class MainActivity extends Activity {
               startActivity(intent);
             }
           });
-
-           /* switch (i % 5) {
-              case 0:
-                card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color1);
-                break;
-              case 1:
-                card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color2);
-                break;
-              case 2:
-                card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color3);
-                break;
-              case 3:
-                card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color4);
-                break;
-              case 4:
-                card.setBackgroundResourceId(R.drawable.demoextra_card_selector_color5);
-                break;
-            }*/
-          cards.add(card);
-
-          mCardArrayAdapter = new CardArrayAdapter(MainActivity.this, cards);
+          mCardArrayAdapter.add(card);
           mCardArrayAdapter.setNotifyOnChange(true);
           mCardArrayAdapter.notifyDataSetChanged();
-
-
-
-          if (listView != null) {
-            listView.setAdapter(mCardArrayAdapter);
-          }
-
-          AnimationAdapter animCardArrayAdapter = new ScaleInAnimationAdapter(mCardArrayAdapter);
-          animCardArrayAdapter.setAbsListView(listView);
-          if (listView != null) {
-            listView.setExternalAdapter(animCardArrayAdapter, mCardArrayAdapter);
-
-          }
         }
-
       } catch (JSONException e) {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
-
   }
 }
 
